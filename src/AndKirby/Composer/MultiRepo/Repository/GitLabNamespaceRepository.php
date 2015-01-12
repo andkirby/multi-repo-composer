@@ -6,7 +6,7 @@
  * Time: 2:01
  */
 
-namespace AndKirby\Composer\Repository;
+namespace AndKirby\Composer\MultiRepo\Repository;
 
 use Composer\Config;
 use Composer\EventDispatcher\EventDispatcher;

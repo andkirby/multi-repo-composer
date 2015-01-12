@@ -1,5 +1,5 @@
 <?php
-namespace AndKirby\Composer\Repository\Vcs;
+namespace AndKirby\Composer\MultiRepo\Repository\Vcs;
 
 use Composer\Repository\Vcs\GitDriver;
 

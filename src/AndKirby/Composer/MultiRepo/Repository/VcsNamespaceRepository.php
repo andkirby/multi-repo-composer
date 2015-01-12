@@ -1,5 +1,5 @@
 <?php
-namespace AndKirby\Composer\Repository;
+namespace AndKirby\Composer\MultiRepo\Repository;
 
 use Composer\Downloader\TransportException;
 use Composer\Package\Loader\ArrayLoader;

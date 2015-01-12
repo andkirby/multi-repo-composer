@@ -1,5 +1,5 @@
 <?php
-namespace AndKirby\Composer\Repository;
+namespace AndKirby\Composer\MultiRepo\Repository;
 
 use Composer\Config;
 use Composer\EventDispatcher\EventDispatcher;
