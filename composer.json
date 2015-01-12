@@ -1,0 +1,12 @@
+{
+  "name": "andkirby/tar-composer-installer",
+  "type": "composer-plugin",
+  "license": "MIT",
+  "autoload": {
+    "psr-0": {"AndKirby\\MultiRepo": "src/"}
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "composer-plugin-api": "1.0.0"
+  }
+}
