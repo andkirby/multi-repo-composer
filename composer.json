@@ -1,5 +1,5 @@
 {
-  "name": "andkirby/tar-composer-installer",
+  "name": "andkirby/multi-repo-composer",
   "type": "composer-plugin",
   "license": "MIT",
   "autoload": {
