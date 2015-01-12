@@ -15,7 +15,10 @@ class GitLabDriver extends GitDriver
     {
         return array(
             'type'   => 'tar',
-            'url'    => $this->_getBranchTarArchiveUrl($identifier),
+            'url'    => $this->_getBranchTarArchiveUrl(
+                            $this->_getBranchNameByHash($identifier)
+                        ),
+            'reference' => $identifier,
             'shasum' => ''
         );
     }
@@ -28,7 +31,36 @@ class GitLabDriver extends GitDriver
      */
     protected function _getBranchTarArchiveUrl($branchOrTag)
     {
-        return $this->getUrl() . '/repository/archive.tar.gz?ref=' . $branchOrTag;
+        return $this->_getBaseArchiveUrl() . '/repository/archive?ref=' . $branchOrTag;
+    }
+
+    /**
+     * Get branch or tag name by commit hash
+     *
+     * @param string $hash
+     * @return mixed
+     */
+    protected function _getBranchNameByHash($hash)
+    {
+        $name = array_search($hash, $this->getTags());
+        if (!$name) {
+            $name = array_search($hash, $this->getBranches());
+        }
+        return $name;
+    }
+
+    /**
+     * Get base GitLab archive URL
+     *
+     * @return string
+     */
+    protected function _getBaseArchiveUrl()
+    {
+        $url = $this->getUrl();
+        if ('.git' == substr($url, -4)) {
+            return substr($url, 0, -4);
+        }
+        return $url;
     }
 
 }
