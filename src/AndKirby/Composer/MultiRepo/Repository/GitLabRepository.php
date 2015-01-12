@@ -17,7 +17,7 @@ class GitLabRepository extends VcsRepository
                                 EventDispatcher $dispatcher = null)
     {
         parent::__construct($repoConfig, $io, $config, $dispatcher, array(
-            'gitlab' => 'AndKirby\Composer\Repository\Vcs\GitLabDriver',
+            'gitlab' => 'AndKirby\Composer\MultiRepo\Repository\Vcs\GitLabDriver',
         ));
     }
 }
