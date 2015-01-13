@@ -24,7 +24,6 @@ class MultiRepoPlugin implements PluginInterface
         $this->initGitLab($composer);
         $this->initMultiVcsRepository($composer, $io);
         $this->initMultiGitLabRepository($composer, $io);
-
     }
 
     /**
