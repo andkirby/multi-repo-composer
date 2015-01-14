@@ -208,7 +208,7 @@ class VcsNamespaceRepository extends VcsRepository
     protected function preProcess(VcsDriverInterface $driver, array $data, $identifier)
     {
         // keep the name of the main identifier for all packages
-        if ($this->packageName) {
+        if ($this->packageName != $this->url) {
             $data['name'] = $this->packageName . '-' . strtolower($data['namespace']);
         }
 
