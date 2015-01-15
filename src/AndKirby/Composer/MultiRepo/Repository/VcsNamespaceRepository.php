@@ -41,7 +41,7 @@ class VcsNamespaceRepository extends VcsRepository
                                 Config $config, EventDispatcher $dispatcher = null,
                                 array $drivers = null)
     {
-        $drivers[self::TYPE] = 'Composer\Repository\Vcs\GitDriver';
+        $drivers[self::TYPE] = 'AndKirby\Composer\MultiRepo\Repository\Vcs\VcsNamespaceDriver';
         parent::__construct($repoConfig, $io, $config, $dispatcher, $drivers);
     }
 
