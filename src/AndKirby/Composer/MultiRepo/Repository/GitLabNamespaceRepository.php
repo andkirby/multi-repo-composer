@@ -19,11 +19,25 @@ use Composer\IO\IOInterface;
  */
 class GitLabNamespaceRepository extends VcsNamespaceRepository
 {
-    public function __construct(array $repoConfig, IOInterface $io, Config $config,
-                                EventDispatcher $dispatcher = null)
+    /**
+     * Repository type
+     */
+    const TYPE = 'gitlab-namespace';
+
+    /**
+     * Initialize GITLab downloader
+     *
+     * @param array $repoConfig
+     * @param IOInterface $io
+     * @param Config $config
+     * @param EventDispatcher $dispatcher
+     * @param array $drivers
+     */
+    public function __construct(array $repoConfig, IOInterface $io,
+                                Config $config, EventDispatcher $dispatcher = null,
+                                array $drivers = null)
     {
-        parent::__construct($repoConfig, $io, $config, $dispatcher, array(
-            'gitlab' => 'AndKirby\Composer\MultiRepo\Repository\Vcs\GitLabDriver',
-        ));
+        $drivers[self::TYPE] = 'AndKirby\Composer\MultiRepo\Repository\Vcs\GitLabDriver';
+        parent::__construct($repoConfig, $io, $config, $dispatcher, $drivers);
     }
 }

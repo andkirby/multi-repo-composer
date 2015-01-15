@@ -1,7 +1,10 @@
 <?php
 namespace AndKirby\Composer\MultiRepo\Repository;
 
+use Composer\Config;
 use Composer\Downloader\TransportException;
+use Composer\EventDispatcher\EventDispatcher;
+use Composer\IO\IOInterface;
 use Composer\Package\Loader\ArrayLoader;
 use Composer\Package\Loader\InvalidPackageException;
 use Composer\Package\Loader\ValidatingArrayLoader;
@@ -20,6 +23,28 @@ use Composer\Repository\VcsRepository;
  */
 class VcsNamespaceRepository extends VcsRepository
 {
+    /**
+     * Repository type
+     */
+    const TYPE = 'vcs-namespace';
+
+    /**
+     * Initialize GIT downloader
+     *
+     * @param array $repoConfig
+     * @param IOInterface $io
+     * @param Config $config
+     * @param EventDispatcher $dispatcher
+     * @param array $drivers
+     */
+    public function __construct(array $repoConfig, IOInterface $io,
+                                Config $config, EventDispatcher $dispatcher = null,
+                                array $drivers = null)
+    {
+        $drivers[self::TYPE] = 'Composer\Repository\Vcs\GitDriver';
+        parent::__construct($repoConfig, $io, $config, $dispatcher, $drivers);
+    }
+
     /**
      * Implemented package namespace usage
      *

@@ -1,9 +1,7 @@
 <?php
 namespace AndKirby\Composer\MultiRepo\Repository\Vcs;
 
-use Composer\Repository\Vcs\GitDriver;
-
-class GitLabDriver extends GitDriver
+class GitLabDriver extends VcsNamespaceDriver
 {
     /**
      * Get GitLab archive info
@@ -13,10 +11,14 @@ class GitLabDriver extends GitDriver
      */
     public function getDist($identifier)
     {
+        if (false === strpos($this->repoConfig['type'], 'gitlab')) {
+            return parent::getDist($identifier);
+        }
+
         return array(
-            'type'   => 'tar',
-            'url'    => $this->_getBranchTarArchiveUrl(
-                            $this->_getBranchNameByHash($identifier)
+            'type'   => $this->getArchiveType(),
+            'url'    => $this->getBranchTarArchiveUrl(
+                            $this->getBranchNameByHash($identifier)
                         ),
             'reference' => $identifier,
             'shasum' => ''
@@ -29,9 +31,10 @@ class GitLabDriver extends GitDriver
      * @param string $branchOrTag
      * @return string
      */
-    protected function _getBranchTarArchiveUrl($branchOrTag)
+    protected function getBranchTarArchiveUrl($branchOrTag)
     {
-        return $this->_getBaseArchiveUrl() . '/repository/archive?ref=' . $branchOrTag;
+        return $this->getBaseArchiveUrl() . '/repository/archive'
+            . $this->getArchiveUrlType() . '?ref=' . $branchOrTag;
     }
 
     /**
@@ -40,7 +43,7 @@ class GitLabDriver extends GitDriver
      * @param string $hash
      * @return mixed
      */
-    protected function _getBranchNameByHash($hash)
+    protected function getBranchNameByHash($hash)
     {
         $name = array_search($hash, $this->getTags());
         if (!$name) {
@@ -54,13 +57,35 @@ class GitLabDriver extends GitDriver
      *
      * @return string
      */
-    protected function _getBaseArchiveUrl()
+    protected function getBaseArchiveUrl()
     {
         $url = $this->getUrl();
         if ('.git' == substr($url, -4)) {
             return substr($url, 0, -4);
         }
         return $url;
+    }
+
+    /**
+     * Get archive type from repository config
+     *
+     * @return string
+     */
+    protected function getArchiveType()
+    {
+        return isset($this->repoConfig['multi-repo']['archive-type'])
+            ? $this->repoConfig['multi-repo']['archive-type'] : 'zip';
+    }
+
+    /**
+     * Get archive URL type from repository config
+     *
+     * @return string
+     */
+    protected function getArchiveUrlType()
+    {
+        $type = $this->getArchiveType();
+        return '.' . ($type == 'tar' ? 'tar.gz' : $type);
     }
 
 }
