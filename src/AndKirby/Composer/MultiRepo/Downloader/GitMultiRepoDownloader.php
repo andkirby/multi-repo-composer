@@ -41,7 +41,7 @@ class GitMultiRepoDownloader extends GitDownloader
     public function __construct(IOInterface $io, Config $config, ProcessExecutor $process = null, Filesystem $fs = null)
     {
         parent::__construct($io, $config, $process, $fs);
-        $this->_initGitUtil();
+        $this->initGitUtil();
     }
 
     /**
@@ -141,7 +141,10 @@ class GitMultiRepoDownloader extends GitDownloader
 
         $ref = $package->getSourceReference();
         if (!$this->isRepositoryCloned($path)) {
-            $this->cloneRepository($package, $path, $url, $ref);
+            $this->cloneRepository($package, $path, $url);
+        } else {
+            $this->io->write('    Multi-repository GIT directory found. Fetching changes...');
+            $this->fetchRepositoryUpdates($package, $path, $url);
         }
 
         if ($newRef = $this->updateToCommit($path, $ref, $package->getPrettyVersion(), $package->getReleaseDate())) {
@@ -168,7 +171,7 @@ class GitMultiRepoDownloader extends GitDownloader
      *
      * @return $this
      */
-    protected function _initGitUtil()
+    protected function initGitUtil()
     {
         $this->gitUtil = new GitUtil($this->io, $this->config, $this->process, $this->filesystem);
         return $this;
@@ -177,25 +180,59 @@ class GitMultiRepoDownloader extends GitDownloader
     /**
      * @return string
      */
-    protected function getRepositoryGitCloneCommand()
+    protected function getCloneCommand()
     {
         $flag = defined('PHP_WINDOWS_VERSION_MAJOR') ? '/D ' : '';
         return 'git clone --no-checkout %s %s && cd ' . $flag . '%2$s && git remote add composer %1$s && git fetch composer';
     }
 
     /**
-     * Get command callback
+     * Get command callback for cloning
      *
      * @param string $path
      * @param string $ref
      * @param string $command
      * @return callable
      */
-    protected function getCommandCallback($path, $ref, $command)
+    protected function getCloneCommandCallback($path, $ref, $command)
     {
         return function ($url) use ($ref, $path, $command) {
             return sprintf($command, ProcessExecutor::escape($url), ProcessExecutor::escape($path), ProcessExecutor::escape($ref));
         };
+    }
+
+    /**
+     * Get fetch command
+     *
+     * @return string
+     */
+    protected function getFetchCommand()
+    {
+        return 'git remote set-url composer %s && git fetch composer && git fetch --tags composer';
+    }
+
+    /**
+     * Fetch remote VCS repository updates
+     *
+     * @param PackageInterface $package
+     * @param string $path
+     * @param string $url
+     * @return $this
+     */
+    protected function fetchRepositoryUpdates(PackageInterface $package, $path, $url)
+    {
+        /**
+         * Copy-pasted from doUpdate
+         *
+         * @see GitDownloader::doUpdate()
+         */
+        $this->io->write('    Checking out ' . $package->getSourceReference());
+        $command = $this->getFetchCommand();
+        $commandCallable = function ($url) use ($command) {
+            return sprintf($command, ProcessExecutor::escape($url));
+        };
+        $this->gitUtil->runCommand($commandCallable, $url, $path);
+        return $this;
     }
 
     /**
@@ -204,15 +241,14 @@ class GitMultiRepoDownloader extends GitDownloader
      * @param PackageInterface $package
      * @param string $path
      * @param string $url
-     * @param string $ref
      * @return $this
      */
-    protected function cloneRepository(PackageInterface $package, $path, $url, $ref)
+    protected function cloneRepository(PackageInterface $package, $path, $url)
     {
-        $command = $this->getRepositoryGitCloneCommand();
-        $this->io->write("    Cloning " . $ref);
+        $command = $this->getCloneCommand();
+        $this->io->write("    Cloning " . $package->getSourceReference());
 
-        $commandCallable = $this->getCommandCallback($path, $ref, $command);
+        $commandCallable = $this->getCloneCommandCallback($path, $package->getSourceReference(), $command);
 
         $this->gitUtil->runCommand($commandCallable, $url, $path, true);
         if ($url !== $package->getSourceUrl()) {
