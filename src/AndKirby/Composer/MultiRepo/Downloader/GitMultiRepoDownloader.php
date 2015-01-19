@@ -66,12 +66,15 @@ class GitMultiRepoDownloader extends GitDownloader
      */
     protected function getMultiRepositoryPath($path)
     {
+        if ($this->isPathOfMultiRepository($path)) {
+            return $path;
+        }
         $pathExploded = explode(PATH_SEPARATOR, $path);
         $last = array_pop($pathExploded);
         if (strpos($last, self::MULTI_REPO_DELIMITER)) {
             $this->defaultPath = $path;
             $last = explode(self::MULTI_REPO_DELIMITER, $last);
-            array_pop($last); //remove last element in array
+            array_pop($last); //remove last directory name part in array
             $last = implode(self::MULTI_REPO_DELIMITER, $last);
             $pathExploded[] = $last; //set back last folder
             return implode(PATH_SEPARATOR, $pathExploded) . self::MULTI_REPO_DIRECTORY_SUFFIX;
@@ -305,5 +308,18 @@ class GitMultiRepoDownloader extends GitDownloader
         $this->filesystem->removeDirectory($directory);
         $this->filesystem->ensureDirectoryExists($directory);
         return $this;
+    }
+
+    /**
+     * Check path is being of multi-repository
+     *
+     * @param string $path
+     * @return bool
+     */
+    protected function isPathOfMultiRepository($path)
+    {
+        return self::MULTI_REPO_DIRECTORY_SUFFIX == substr(
+            $path, -strlen(self::MULTI_REPO_DIRECTORY_SUFFIX)
+        );
     }
 }
