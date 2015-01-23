@@ -3,18 +3,6 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/andkirby/multi-repo-composer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This repository contains multi-package composer repository and GitLab repository for composer.
 
-To use multi-package repository please use type "vcs-namespace".
-```
-{
-  "repositories": [
-    {
-      "type": "vcs-namespace",
-      "url": "git@github.com:yourname/yourrepo"
-    }
-  ]
-}
-```
-
 ## Requirements
 ### Package Name
 You have to name your packages by name format:
