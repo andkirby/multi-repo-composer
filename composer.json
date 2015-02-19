@@ -5,14 +5,12 @@
   "autoload": {
     "psr-0": {"AndKirby\\Composer\\MultiRepo": "src/"}
   },
-  "extra": {
-    "class": "AndKirby\\Composer\\MultiRepo\\MultiRepoPlugin"
-  },
   "minimum-stability": "dev",
   "require": {
     "composer-plugin-api": "1.0.0"
   },
   "extra": {
+    "class": "AndKirby\\Composer\\MultiRepo\\MultiRepoPlugin",
     "branch-alias": {
       "dev-master": "0.3.x-dev"
     }
