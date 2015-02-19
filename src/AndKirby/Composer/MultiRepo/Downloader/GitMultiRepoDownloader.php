@@ -73,10 +73,8 @@ class GitMultiRepoDownloader extends GitDownloader
         $last = array_pop($pathExploded);
         if (strpos($last, self::MULTI_REPO_DELIMITER)) {
             $this->defaultPath = $path;
-            $last = explode(self::MULTI_REPO_DELIMITER, $last);
-            array_pop($last); //remove last directory name part in array
-            $last = implode(self::MULTI_REPO_DELIMITER, $last);
-            $pathExploded[] = $last; //set back last folder
+            $arr = explode(self::MULTI_REPO_DELIMITER, $last);
+            $pathExploded[] = array_shift($arr);
             return implode(PATH_SEPARATOR, $pathExploded) . self::MULTI_REPO_DIRECTORY_SUFFIX;
         }
         return null;
