@@ -234,7 +234,9 @@ class VcsNamespaceRepository extends VcsRepository
     {
         // keep the name of the main identifier for all packages
         if ($this->packageName != $this->url) {
-            $data['name'] = $this->packageName . '-' . strtolower($data['namespace']);
+            $namespace = preg_replace('/([a-z0-9])([A-Z])/', '$1_$2', $data['namespace']);
+            $namespace = strtolower($namespace);
+            $data['name'] = $this->packageName . '-' . $namespace;
         }
 
         if (!isset($data['dist'])) {
