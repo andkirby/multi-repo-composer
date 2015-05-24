@@ -6,7 +6,7 @@ This repository contains multi-package composer repository and GitLab repository
 ## Requirements
 ### Package Name
 You have to name your packages by name format:
-`vendor/repo-name-package_name`
+`vendor/myrepo-package_name`
 Where `package_name` - your namespace in GIT.
 ### Branch Name and Tag Name
 Branch and tag should have a namespace like `PackageName/branch`.
@@ -21,7 +21,7 @@ PackageName/1.0.0-beta
 
 ### Single GIT repository in vendor
 If you require several packages from your multi-repository it will create the one with GIT (if you use vcs).
-The name by example is `vendor/repo-name-multi-repo`. Ie your general repository name + `-multi-repo`.
+The name by example is `vendor/myrepo-multi-repo`. Ie your general repository name + `-multi-repo`.
 It's just to avoid clone a repository several times.
 
 ### Satis
