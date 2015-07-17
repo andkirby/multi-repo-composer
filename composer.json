@@ -9,6 +9,9 @@
   "require": {
     "composer-plugin-api": "1.0.0"
   },
+  "require-dev": {
+    "composer/composer": "@alpha"
+  },
   "extra": {
     "class": "AndKirby\\Composer\\MultiRepo\\MultiRepoPlugin",
     "branch-alias": {
