@@ -69,13 +69,18 @@ class GitMultiRepoDownloader extends GitDownloader
         if ($this->isPathOfMultiRepository($path)) {
             return $path;
         }
-        $pathExploded = explode(PATH_SEPARATOR, $path);
-        $last = array_pop($pathExploded);
-        if (strpos($last, self::MULTI_REPO_DELIMITER)) {
+        $packageDir = pathinfo($path, PATHINFO_BASENAME);
+        if (strpos($packageDir, self::MULTI_REPO_DELIMITER)) {
             $this->defaultPath = $path;
-            $arr = explode(self::MULTI_REPO_DELIMITER, $last);
-            $pathExploded[] = array_shift($arr);
-            return implode(PATH_SEPARATOR, $pathExploded) . self::MULTI_REPO_DIRECTORY_SUFFIX;
+            $arr = explode(self::MULTI_REPO_DELIMITER, $packageDir);
+            $baseName = array_shift($arr);
+
+            //make full path to new general multi-repo directory
+            return str_replace(
+                $packageDir,
+                $baseName . self::MULTI_REPO_DIRECTORY_SUFFIX, //make repo dir name
+                $path
+            );
         }
         return null;
     }
