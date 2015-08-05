@@ -27,7 +27,12 @@ class GitMultiRepoDownloader extends GitDownloader
     /**
      * Config key in extra to set custom parent dir for multi repo dirs
      */
-    const MULTI_REPO_PARENT_DIR_KEY = 'multi-repo-parent-dir';
+    const KEY_MULTI_REPO_PARENT_DIR = 'multi-repo-parent-dir';
+
+    /**
+     * Config key in extra to set custom parent dir in cache-dir-repo
+     */
+    const KEY_MULTI_REPO_IN_CACHE = 'multi-repo-dir-in-cache'; //default true
 
     /**
      * Git Utility
@@ -88,7 +93,7 @@ class GitMultiRepoDownloader extends GitDownloader
             $arr = explode(self::MULTI_REPO_DELIMITER, $packageDir);
             $baseName = array_shift($arr);
 
-            $customDir = $this->getCustomParentMultiRepoDir();
+            $customDir = $this->getParentMultiRepoDir();
 
             if ($customDir) {
                 //get vendor name
@@ -113,13 +118,16 @@ class GitMultiRepoDownloader extends GitDownloader
      *
      * @return string|null
      */
-    protected function getCustomParentMultiRepoDir()
+    protected function getParentMultiRepoDir()
     {
         $rootConfig = $this->config->get('root_extra_config');
-        if (!empty($rootConfig[self::MULTI_REPO_PARENT_DIR_KEY])) {
-            $rootConfig[self::MULTI_REPO_PARENT_DIR_KEY] = rtrim($rootConfig[self::MULTI_REPO_PARENT_DIR_KEY], '\\/');
-            $this->filesystem->ensureDirectoryExists($rootConfig[self::MULTI_REPO_PARENT_DIR_KEY]);
-            return $rootConfig[self::MULTI_REPO_PARENT_DIR_KEY];
+        if (!empty($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR])) {
+            $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR] = rtrim($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR], '\\/');
+            $this->filesystem->ensureDirectoryExists($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR]);
+            return $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR];
+        }
+        if (!isset($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR]) || $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR]) {
+            return $this->config->get('cache-repo-dir');
         }
         return null;
     }
