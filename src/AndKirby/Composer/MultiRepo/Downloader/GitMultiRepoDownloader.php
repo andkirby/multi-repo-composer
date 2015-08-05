@@ -14,8 +14,21 @@ use RecursiveIteratorIterator;
 
 class GitMultiRepoDownloader extends GitDownloader
 {
+    /**
+     * Delimiter to build multi-repo dir name
+     */
     const MULTI_REPO_DELIMITER = '-';
+
+    /**
+     * Suffix for multi-repo dirs
+     */
     const MULTI_REPO_DIRECTORY_SUFFIX = '-multi-repo';
+
+    /**
+     * Config key in extra to set custom parent dir for multi repo dirs
+     */
+    const MULTI_REPO_PARENT_DIR_KEY = 'multi-repo-parent-dir';
+
     /**
      * Git Utility
      *
@@ -75,12 +88,38 @@ class GitMultiRepoDownloader extends GitDownloader
             $arr = explode(self::MULTI_REPO_DELIMITER, $packageDir);
             $baseName = array_shift($arr);
 
+            $customDir = $this->getCustomParentMultiRepoDir();
+
+            if ($customDir) {
+                //get vendor name
+                $vendor = pathinfo(dirname($path), PATHINFO_BASENAME);
+                //get path based upon custom parent dir
+                return $customDir . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR
+                       . $baseName . self::MULTI_REPO_DIRECTORY_SUFFIX;
+            }
+
             //make full path to new general multi-repo directory
             return str_replace(
                 $packageDir,
                 $baseName . self::MULTI_REPO_DIRECTORY_SUFFIX, //make repo dir name
                 $path
             );
+        }
+        return null;
+    }
+
+    /**
+     * Get custom parent multi repository directory
+     *
+     * @return string|null
+     */
+    protected function getCustomParentMultiRepoDir()
+    {
+        $rootConfig = $this->config->get('root_extra_config');
+        if (!empty($rootConfig[self::MULTI_REPO_PARENT_DIR_KEY])) {
+            $rootConfig[self::MULTI_REPO_PARENT_DIR_KEY] = rtrim($rootConfig[self::MULTI_REPO_PARENT_DIR_KEY], '\\/');
+            $this->filesystem->ensureDirectoryExists($rootConfig[self::MULTI_REPO_PARENT_DIR_KEY]);
+            return $rootConfig[self::MULTI_REPO_PARENT_DIR_KEY];
         }
         return null;
     }

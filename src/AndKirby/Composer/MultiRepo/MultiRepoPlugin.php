@@ -21,6 +21,12 @@ class MultiRepoPlugin implements PluginInterface
      */
     public function activate(Composer $composer, IOInterface $io)
     {
+        //set config from root package
+        $composer->getConfig()->merge(array(
+            'config' => array(
+                'root_extra_config' => $composer->getPackage()->getExtra()
+            )
+        ));
         $this->initGitLab($composer);
         $this->initMultiVcsRepository($composer, $io);
         $this->initMultiGitLabRepository($composer, $io);
