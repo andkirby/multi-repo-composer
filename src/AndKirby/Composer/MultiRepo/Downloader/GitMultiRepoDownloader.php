@@ -145,7 +145,8 @@ class GitMultiRepoDownloader extends GitDownloader
             return $this;
         }
 
-        if (!is_dir($source)) {
+        if (is_file($source)) {
+            //copy file
             copy($source, $target);
             return $this;
         }
