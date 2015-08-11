@@ -129,7 +129,7 @@ class GitMultiRepoDownloader extends GitDownloader
             $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR] = rtrim($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR], '\\/');
             return $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR];
         }
-        if (!isset($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR]) || $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR]) {
+        if (!isset($rootConfig[self::KEY_MULTI_REPO_IN_CACHE]) || $rootConfig[self::KEY_MULTI_REPO_IN_CACHE]) {
             return $this->config->get('cache-repo-dir');
         }
         return null;
