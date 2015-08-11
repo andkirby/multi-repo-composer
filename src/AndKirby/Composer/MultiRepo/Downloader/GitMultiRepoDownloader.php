@@ -88,29 +88,33 @@ class GitMultiRepoDownloader extends GitDownloader
             return $path;
         }
         $packageDir = pathinfo($path, PATHINFO_BASENAME);
-        if (strpos($packageDir, self::MULTI_REPO_DELIMITER)) {
-            $this->defaultPath = $path;
-            $arr = explode(self::MULTI_REPO_DELIMITER, $packageDir);
-            $baseName = array_shift($arr);
+        if (!strpos($packageDir, self::MULTI_REPO_DELIMITER)) {
+            //package cannot be used in multi-repo
+            return null;
+        }
 
-            $customDir = $this->getParentMultiRepoDir();
+        $this->defaultPath = $path;
+        $arr = explode(self::MULTI_REPO_DELIMITER, $packageDir);
+        $baseName = array_shift($arr);
 
-            if ($customDir) {
-                //get vendor name
-                $vendor = pathinfo(dirname($path), PATHINFO_BASENAME);
-                //get path based upon custom parent dir
-                return $customDir . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR
+        $customDir = $this->getParentMultiRepoDir();
+
+        if ($customDir) {
+            //get vendor name
+            $vendor = pathinfo(dirname($path), PATHINFO_BASENAME);
+            //get path based upon custom parent dir
+            $newPath = $customDir . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR
                        . $baseName . self::MULTI_REPO_DIRECTORY_SUFFIX;
-            }
-
+        } else {
             //make full path to new general multi-repo directory
-            return str_replace(
+            $newPath = str_replace(
                 $packageDir,
                 $baseName . self::MULTI_REPO_DIRECTORY_SUFFIX, //make repo dir name
                 $path
             );
         }
-        return null;
+        $this->filesystem->ensureDirectoryExists($newPath);
+        return $newPath;
     }
 
     /**
@@ -123,7 +127,6 @@ class GitMultiRepoDownloader extends GitDownloader
         $rootConfig = $this->config->get('root_extra_config');
         if (!empty($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR])) {
             $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR] = rtrim($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR], '\\/');
-            $this->filesystem->ensureDirectoryExists($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR]);
             return $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR];
         }
         if (!isset($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR]) || $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR]) {
