@@ -6,8 +6,18 @@ This repository contains multi-package composer repository and GitLab repository
 ## Requirements
 ### Package Name
 You have to name your packages by name format:
-`vendor/myrepo-package_name`
+`vendor/my_repo-package_name`
 Where `package_name` - your namespace in GIT.
+
+### Naming
+Please be aware "-" is namespace separator in first case.
+A package with name `me/foo-cool_package-second_edition` will produce a multi-repo directory:
+```
+me/foo-multi-repo
+```
+
+`foo` - is a base repository name in this example.
+
 ### Branch Name and Tag Name
 Branch and tag should have a namespace like `PackageName/branch`.
 Examples:
@@ -25,7 +35,44 @@ The name by example is `vendor/myrepo-multi-repo`. Ie your general repository na
 It's just to avoid clone a repository several times.
 
 ### Satis
-[`andkirby/satis`](https://github.com/andkirby/satis) is modifed version of `composer/satis` with supporting multi-repositories.
+[`andkirby/satis`](https://github.com/andkirby/satis) is modified version of `composer/satis` with supporting multi-repositories.
 
 ### GIT Flow
 You may follow GIT Flow.
+
+## Configuring
+### Default multi repositories path
+Actually multi-repositories will be placed in the repositories cache directory: 
+```
+~/.composer/cache/repo/your-vendor/your_project-multi-repo
+```
+
+### Custom multi-repositories directory
+But you may customize it via root configuration below:
+```
+{
+  "extra":
+    "multi-repo-parent-dir": "/path/to/multi-repo/dirs/"
+}
+```
+
+### Current vendor multi-repositories directory
+Also you may use saving in the current vendor directory.
+```
+{
+  "extra":
+    "multi-repo-dir-in-cache": false
+}
+```
+
+It will have following structure:
+
+```
+./
+  composer.json
+  vendor/
+    your-vendor/
+      your_project-cool_package/
+      your_project-multi-repo/
+```
+
