@@ -18,6 +18,8 @@ me/foo-multi-repo
 
 `foo` - is a base repository name in this example.
 
+That's why you SHOULD NOT use "-" in the name spaces.
+
 ### Branch Name and Tag Name
 Branch and tag should have a namespace like `PackageName/branch`.
 Examples:
