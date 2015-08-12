@@ -112,6 +112,9 @@ class GitMultiRepoDownloader extends GitDownloader
                 $baseName . self::MULTI_REPO_DIRECTORY_SUFFIX, //make repo dir name
                 $path
             );
+            if ($this->io->isVeryVerbose()) {
+                $this->io->write('    Multi-repository path will be within the current vendor directory.');
+            }
         }
         $this->filesystem->ensureDirectoryExists($newPath);
         return $newPath;
@@ -127,9 +130,15 @@ class GitMultiRepoDownloader extends GitDownloader
         $rootConfig = $this->config->get('root_extra_config');
         if (!empty($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR])) {
             $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR] = rtrim($rootConfig[self::KEY_MULTI_REPO_PARENT_DIR], '\\/');
+            if ($this->io->isVeryVerbose()) {
+                $this->io->write('    Multi-repository path will be in custom parent directory.');
+            }
             return $rootConfig[self::KEY_MULTI_REPO_PARENT_DIR];
         }
         if (!isset($rootConfig[self::KEY_MULTI_REPO_IN_CACHE]) || $rootConfig[self::KEY_MULTI_REPO_IN_CACHE]) {
+            if ($this->io->isVeryVerbose()) {
+                $this->io->write('    Multi-repository path will be in "cache-repo-dir".');
+            }
             return $this->config->get('cache-repo-dir');
         }
         return null;
@@ -197,7 +206,11 @@ class GitMultiRepoDownloader extends GitDownloader
         }
 
         $ref = $package->getSourceReference();
+        if ($this->io->isVerbose()) {
+            $this->io->write('    Multi-repository path: ' . $path);
+        }
         if (!$this->isRepositoryCloned($path)) {
+            $this->io->write('    Multi-repository GIT directory not found. Cloning...');
             $this->cloneRepository($package, $path, $url);
         } else {
             $this->io->write('    Multi-repository GIT directory found. Fetching changes...');
