@@ -105,6 +105,9 @@ class GitMultiRepoDownloader extends GitDownloader
             //get path based upon custom parent dir
             $newPath = $customDir . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR
                        . $baseName . self::MULTI_REPO_DIRECTORY_SUFFIX;
+            if ($this->io->isVeryVerbose()) {
+                $this->io->write('    Multi-repository custom path found.');
+            }
         } else {
             //make full path to new general multi-repo directory
             $newPath = str_replace(
