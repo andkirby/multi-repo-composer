@@ -233,6 +233,16 @@ class GitMultiRepoDownloader extends GitDownloader
 
     public function doUpdate(PackageInterface $initial, PackageInterface $target, $path, $url)
     {
+        GitUtil::cleanEnv();
+
+        $path = $this->normalizePath($path);
+
+        if (!$this->isRepositoryCloned($path)) {
+            //clone the multi repository if it was removed
+            $this->io->write('    Multi-repository GIT directory not found. Cloning...');
+            $this->cloneRepository($initial, $path, $url);
+        }
+
         parent::doUpdate($initial, $target, $path, $url);
 
         //copy file into required directory
