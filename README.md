@@ -78,3 +78,21 @@ It will have following structure:
       your_project-multi-repo/
 ```
 
+## GitFlow
+Probably it would be useful to switch a namespace in GitFlow quickly.
+
+```shell
+git flow-namespace ModuleName
+```
+
+File `git-flow-namespace`:
+```shell
+#!/bin/sh
+git config gitflow.branch.master "$1"/master
+git config gitflow.branch.develop "$1"/develop
+git config gitflow.prefix.feature "$1"/feature/
+git config gitflow.prefix.release "$1"/release/
+git config gitflow.prefix.hotfix "$1"/hotfix/
+git config gitflow.prefix.support "$1"/support/
+git config gitflow.prefix.versiontag "$1"/v
+```
