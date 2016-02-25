@@ -7,6 +7,9 @@
         </github>
     </tracker>
     <validators>
+        <CodingStandard>
+            <underscore_in_non_public>0</underscore_in_non_public>
+        </CodingStandard>
         <CodeSniffer>
             <rule>
                 <directory>vendor/escapestudios/symfony2-coding-standard/Symfony2</directory>
