@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <tracker>
+        <type>github</type>
         <github>
             <project>andkirby/multi-repo-composer</project>
         </github>
     </tracker>
+    <validators>
+        <CodeSniffer>
+            <rule>
+                <directory>vendor/escapestudios/symfony2-coding-standard/Symfony2</directory>
+            </rule>
+        </CodeSniffer>
+    </validators>
 </config>

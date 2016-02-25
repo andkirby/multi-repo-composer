@@ -3,14 +3,16 @@
   "type": "composer-plugin",
   "license": "MIT",
   "autoload": {
-    "psr-0": {"AndKirby\\Composer\\MultiRepo": "src/"}
+    "psr-4": {"AndKirby\\Composer\\MultiRepo": "src/"}
   },
   "minimum-stability": "dev",
   "require": {
     "composer-plugin-api": "^1.0.0"
   },
   "require-dev": {
-    "composer/composer": "@alpha"
+    "composer/composer": "@alpha",
+    "squizlabs/php_codesniffer": "2.*@beta",
+    "escapestudios/symfony2-coding-standard": "~2.0@beta"
   },
   "extra": {
     "class": "AndKirby\\Composer\\MultiRepo\\MultiRepoPlugin",
