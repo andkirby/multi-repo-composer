@@ -4,7 +4,7 @@
   "type": "composer-plugin",
   "license": "MIT",
   "autoload": {
-    "psr-4": {"AndKirby\\Composer\\MultiRepo\\": "src/"}
+    "psr-0": {"AndKirby\\Composer\\MultiRepo\\": "src/"}
   },
   "minimum-stability": "dev",
   "require": {
