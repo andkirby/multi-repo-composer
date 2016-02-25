@@ -1,9 +1,10 @@
 {
   "name": "andkirby/multi-repo-composer",
+  "description": "Plugin for loading multi-repository packages (several packages in the only repository).",
   "type": "composer-plugin",
   "license": "MIT",
   "autoload": {
-    "psr-4": {"AndKirby\\Composer\\MultiRepo": "src/"}
+    "psr-4": {"AndKirby\\Composer\\MultiRepo\\": "src/"}
   },
   "minimum-stability": "dev",
   "require": {
