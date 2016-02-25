@@ -1,22 +1,28 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: kirby
+ * Date: 12.01.2015
+ * Time: 2:01
+ */
+
 namespace AndKirby\Composer\MultiRepo\Repository;
 
 use Composer\Config;
 use Composer\EventDispatcher\EventDispatcher;
 use Composer\IO\IOInterface;
-use Composer\Repository\VcsRepository;
 
 /**
  * Same repository as Vcs with the specific driver for GitLab
  *
  * @package AndKirby\Composer\Repository
  */
-class GitLabRepository extends VcsRepository
+class GitLabNamespaceRepository extends VcsNamespaceRepository
 {
     /**
      * Repository type
      */
-    const TYPE = 'gitlab';
+    const TYPE = 'gitlab-namespace';
 
     /**
      * Initialize GITLab downloader
