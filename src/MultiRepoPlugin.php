@@ -81,7 +81,8 @@ class MultiRepoPlugin implements PluginInterface
             ->setDownloader('gitlab-namespace', new GitMultiRepoDownloader($io, $composer->getConfig()));
         $composer->getRepositoryManager()
             ->setRepositoryClass(
-                'gitlab-namespace', 'AndKirby\Composer\MultiRepo\Repository\GitLabNamespaceRepository'
+                'gitlab-namespace',
+                'AndKirby\Composer\MultiRepo\Repository\GitLabNamespaceRepository'
             );
 
         return $this;
@@ -100,10 +101,11 @@ class MultiRepoPlugin implements PluginInterface
             if (empty($repo['multi-repo-type'])) {
                 continue;
             }
-            $repositories[$name]                 = false; // remove old
-            $repo['type']                        = $repo['multi-repo-type'];
-            $repositories[$name . '-multi-repo'] = $repo;
-            $updated                             = true;
+            $repo['type']                      = $repo['multi-repo-type'];
+            $repositories[$name.'-multi-repo'] = $repo;
+
+            $repositories[$name] = false; // remove old node on merge
+            $updated             = true;
         }
 
         if ($updated) {
