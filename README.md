@@ -100,7 +100,7 @@ git config gitflow.prefix.versiontag "$1"/v
 ```
 And then add an alias
 ```shell
-git config --global '!bash ~/.git-flow-namespace-set.sh $1; echo > /dev/null'
+git config --global alias.flow-namespace-set '!bash ~/.git-flow-namespace-set.sh $1; echo > /dev/null'
 ```
 Now you may use it:
 ```
