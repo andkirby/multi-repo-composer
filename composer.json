@@ -7,6 +7,7 @@
     "psr-4": {"AndKirby\\Composer\\MultiRepo\\": "src/"}
   },
   "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "composer-plugin-api": "^1.0.0"
   },
@@ -18,7 +19,7 @@
   "extra": {
     "class": "AndKirby\\Composer\\MultiRepo\\MultiRepoPlugin",
     "branch-alias": {
-      "dev-master": "0.3.x-dev"
+      "dev-master": "0.8.x-dev"
     }
   }
 }
