@@ -80,19 +80,29 @@ It will have following structure:
 
 ## GitFlow
 Probably it would be useful to switch a namespace in GitFlow quickly.
+Try to use composer package [`rikby/gitext`](../../../../rikby/gitext#gitflow-settings-for-multi-composer-repository)
 
-```shell
-git flow-namespace ModuleName
+### Manual way
+Create a file .git-flow-namespace-set.sh
 ```
-
-File `git-flow-namespace`:
+vim ~/.git-flow-namespace-set.sh
+```
 ```shell
 #!/bin/sh
 git config gitflow.branch.master "$1"/master
 git config gitflow.branch.develop "$1"/develop
 git config gitflow.prefix.feature "$1"/feature/
+git config gitflow.prefix.bugfix "$1"/bugfix/
 git config gitflow.prefix.release "$1"/release/
 git config gitflow.prefix.hotfix "$1"/hotfix/
 git config gitflow.prefix.support "$1"/support/
 git config gitflow.prefix.versiontag "$1"/v
+```
+And then add an alias
+```shell
+git config --global alias.flow-namespace-set '!bash ~/.git-flow-namespace-set.sh'
+```
+Now you may use it:
+```
+git flow-namespace-set ModuleName
 ```
