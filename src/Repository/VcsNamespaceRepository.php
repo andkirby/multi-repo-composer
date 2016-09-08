@@ -23,13 +23,18 @@ use Composer\Repository\VcsRepository;
  */
 class VcsNamespaceRepository extends VcsRepository
 {
-    /**
-     * Repository type
+    /**#@+
+     * Repository types
      */
-    const TYPE = 'vcs-namespace';
+    const TYPE_VCS    = 'vcs-namespace';
+    const TYPE_GIT    = 'git-namespace';
+    const TYPE_GITLAB = 'gitlab-namespace';
+    const TYPE_GITHUB = 'github-namespace';
+    const TYPE_GIT_BITBACKET = 'git-bitbucket-namespace';
+    /**#@-*/
 
     /**
-     * Initialize GIT downloader
+     * Initialize repository
      *
      * @param array $repoConfig
      * @param IOInterface $io
@@ -38,11 +43,32 @@ class VcsNamespaceRepository extends VcsRepository
      * @param array $drivers
      */
     public function __construct(array $repoConfig, IOInterface $io,
-                                Config $config, EventDispatcher $dispatcher = null,
-                                array $drivers = null)
+        Config $config, EventDispatcher $dispatcher = null,
+        array $drivers = null)
     {
-        $drivers[self::TYPE] = 'AndKirby\Composer\MultiRepo\Repository\Vcs\VcsNamespaceDriver';
+        $drivers[self::TYPE_VCS]    = 'Composer\Repository\Vcs\VcsDriver';
+        $drivers[self::TYPE_GIT]    = 'Composer\Repository\Vcs\GitDriver';
+        $drivers[self::TYPE_GITLAB] = 'Composer\Repository\Vcs\GitLabDriver';
+        $drivers[self::TYPE_GITHUB] = 'Composer\Repository\Vcs\GitHubDriver';
+        $drivers[self::TYPE_GIT_BITBACKET] = 'Composer\Repository\Vcs\GitBitbucketDriver';
+
         parent::__construct($repoConfig, $io, $config, $dispatcher, $drivers);
+    }
+
+    /**
+     * Get namespace types
+     *
+     * @return array
+     */
+    public static function getTypes()
+    {
+        return [
+            self::TYPE_VCS,
+            self::TYPE_GIT,
+            self::TYPE_GITLAB,
+            self::TYPE_GITHUB,
+            self::TYPE_GIT_BITBACKET,
+        ];
     }
 
     /**
@@ -244,6 +270,7 @@ class VcsNamespaceRepository extends VcsRepository
         }
         if (!isset($data['source'])) {
             $data['source'] = $driver->getSource($identifier);
+            $data['source']['type'] = $this->repoConfig['type'];
         }
 
         return $data;

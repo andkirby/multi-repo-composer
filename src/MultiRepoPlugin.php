@@ -2,6 +2,7 @@
 namespace AndKirby\Composer\MultiRepo;
 
 use AndKirby\Composer\MultiRepo\Downloader\GitMultiRepoDownloader;
+use AndKirby\Composer\MultiRepo\Repository\VcsNamespaceRepository;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
@@ -23,32 +24,16 @@ class MultiRepoPlugin implements PluginInterface
     {
         //set config from root package
         $composer->getConfig()->merge(
-            array(
-                'config' => array(
+            [
+                'config' => [
                     'root_extra_config' => $composer->getPackage()->getExtra(),
-                ),
-            )
+                ],
+            ]
         );
 
-        $this->initMultiRepositories($composer);
+        $this->initConfig($composer);
 
-        $this->initGitLab($composer);
-        $this->initMultiVcsRepository($composer, $io);
-        $this->initMultiGitLabRepository($composer, $io);
-    }
-
-    /**
-     * Init GitLab repository
-     *
-     * @param Composer $composer
-     * @return $this
-     */
-    protected function initGitLab(Composer $composer)
-    {
-        $composer->getRepositoryManager()
-            ->setRepositoryClass('gitlab', 'AndKirby\Composer\MultiRepo\Repository\GitLabRepository');
-
-        return $this;
+        $this->initMultiVcsRepositories($composer, $io);
     }
 
     /**
@@ -58,32 +43,15 @@ class MultiRepoPlugin implements PluginInterface
      * @param IOInterface $io
      * @return $this
      */
-    protected function initMultiVcsRepository(Composer $composer, IOInterface $io)
+    protected function initMultiVcsRepositories(Composer $composer, IOInterface $io)
     {
-        $composer->getDownloadManager()
-            ->setDownloader('vcs-namespace', new GitMultiRepoDownloader($io, $composer->getConfig()));
-        $composer->getRepositoryManager()
-            ->setRepositoryClass('vcs-namespace', 'AndKirby\Composer\MultiRepo\Repository\VcsNamespaceRepository');
-
-        return $this;
-    }
-
-    /**
-     * Init multi GitLab repository
-     *
-     * @param Composer    $composer
-     * @param IOInterface $io
-     * @return $this
-     */
-    protected function initMultiGitLabRepository(Composer $composer, IOInterface $io)
-    {
-        $composer->getDownloadManager()
-            ->setDownloader('gitlab-namespace', new GitMultiRepoDownloader($io, $composer->getConfig()));
-        $composer->getRepositoryManager()
-            ->setRepositoryClass(
-                'gitlab-namespace',
-                'AndKirby\Composer\MultiRepo\Repository\GitLabNamespaceRepository'
-            );
+        $repoDownloader = new GitMultiRepoDownloader($io, $composer->getConfig());
+        foreach ($this->getVcsTypes() as $type) {
+            $composer->getDownloadManager()
+                ->setDownloader($type, $repoDownloader);
+            $composer->getRepositoryManager()
+                ->setRepositoryClass($type, $this->getMultiRepositoryClassName());
+        }
 
         return $this;
     }
@@ -92,8 +60,9 @@ class MultiRepoPlugin implements PluginInterface
      * Reset multi-repository type
      *
      * @param \Composer\Composer $composer
+     * @return $this
      */
-    protected function initMultiRepositories(Composer $composer)
+    protected function initConfig(Composer $composer)
     {
         $repositories = $composer->getConfig()->getRepositories();
         $updated      = false;
@@ -109,7 +78,29 @@ class MultiRepoPlugin implements PluginInterface
         }
 
         if ($updated) {
-            $composer->getConfig()->merge(array('repositories' => $repositories));
+            $composer->getConfig()->merge(['repositories' => $repositories]);
         }
+
+        return $this;
+    }
+
+    /**
+     * Get multi repository class name
+     *
+     * @return string
+     */
+    protected function getMultiRepositoryClassName()
+    {
+        return VcsNamespaceRepository::class;
+    }
+
+    /**
+     * Get VCS namespace type
+     *
+     * @return array
+     */
+    protected function getVcsTypes()
+    {
+        return VcsNamespaceRepository::getTypes();
     }
 }
