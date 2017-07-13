@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @license https://raw.githubusercontent.com/andkirby/commithook/master/LICENSE.md
+ */
+-->
+<ruleset name="CommitHooks">
+    <description>The CommitHooks coding standard. (extended from Symfony2)</description>
+
+    <!-- Include the whole Symfony2 standard -->
+    <rule ref="../../vendor/escapestudios/symfony2-coding-standard/Symfony2"/>
+
+    <rule ref="Squiz.Strings.ConcatenationSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true"/>
+        </properties>
+    </rule>
+</ruleset>

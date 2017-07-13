@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <hooks>
+        <pre-commit>
+            <filetype>
+                <php>
+                    <validators>
+                        <CodingStandard-UnderscoreInMethod>0</CodingStandard-UnderscoreInMethod>
+                    </validators>
+                </php>
+            </filetype>
+        </pre-commit>
+    </hooks>
+</config>
