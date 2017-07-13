@@ -36,21 +36,40 @@ class VcsNamespaceRepository extends VcsRepository
     /**
      * Initialize repository
      *
-     * @param array $repoConfig
-     * @param IOInterface $io
-     * @param Config $config
+     * @param array           $repoConfig
+     * @param IOInterface     $io
+     * @param Config          $config
      * @param EventDispatcher $dispatcher
-     * @param array $drivers
+     * @param array           $drivers
+     * @see \Composer\Repository\VcsRepository::__construct()
      */
-    public function __construct(array $repoConfig, IOInterface $io,
-        Config $config, EventDispatcher $dispatcher = null,
-        array $drivers = null)
-    {
-        $drivers[self::TYPE_VCS]    = 'Composer\Repository\Vcs\VcsDriver';
-        $drivers[self::TYPE_GIT]    = 'Composer\Repository\Vcs\GitDriver';
-        $drivers[self::TYPE_GITLAB] = 'Composer\Repository\Vcs\GitLabDriver';
-        $drivers[self::TYPE_GITHUB] = 'Composer\Repository\Vcs\GitHubDriver';
-        $drivers[self::TYPE_GIT_BITBACKET] = 'Composer\Repository\Vcs\GitBitbucketDriver';
+    public function __construct(
+        array $repoConfig,
+        IOInterface $io,
+        Config $config,
+        EventDispatcher $dispatcher = null,
+        array $drivers = null
+    ) {
+        /**
+         * The list is taken from original VcsRepository
+         *
+         * @see \Composer\Repository\VcsRepository::__construct()
+         */
+        $drivers = array_merge(
+            array(
+                'github'        => 'Composer\Repository\Vcs\GitHubDriver',
+                'gitlab'        => 'Composer\Repository\Vcs\GitLabDriver',
+                'git-bitbucket' => 'Composer\Repository\Vcs\GitBitbucketDriver',
+                'git'           => 'Composer\Repository\Vcs\GitDriver',
+                'hg-bitbucket'  => 'Composer\Repository\Vcs\HgBitbucketDriver',
+                'hg'            => 'Composer\Repository\Vcs\HgDriver',
+                'perforce'      => 'Composer\Repository\Vcs\PerforceDriver',
+                'fossil'        => 'Composer\Repository\Vcs\FossilDriver',
+                // svn must be last because identifying a subversion server for sure is practically impossible
+                'svn'           => 'Composer\Repository\Vcs\SvnDriver',
+            ),
+            $drivers
+        );
 
         parent::__construct($repoConfig, $io, $config, $dispatcher, $drivers);
     }
