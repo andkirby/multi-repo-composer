@@ -31,6 +31,9 @@ class VcsNamespaceRepository extends VcsRepository
     const TYPE_GITLAB = 'gitlab-namespace';
     const TYPE_GITHUB = 'github-namespace';
     const TYPE_GIT_BITBACKET = 'git-bitbucket-namespace';
+
+    protected static $types;
+
     /**#@-*/
 
     /**
@@ -71,6 +74,8 @@ class VcsNamespaceRepository extends VcsRepository
             $drivers
         );
 
+        self::$types = array_keys($drivers);
+
         parent::__construct($repoConfig, $io, $config, $dispatcher, $drivers);
     }
 
@@ -81,13 +86,7 @@ class VcsNamespaceRepository extends VcsRepository
      */
     public static function getTypes()
     {
-        return [
-            self::TYPE_VCS,
-            self::TYPE_GIT,
-            self::TYPE_GITLAB,
-            self::TYPE_GITHUB,
-            self::TYPE_GIT_BITBACKET,
-        ];
+        return self::$types;
     }
 
     /**
