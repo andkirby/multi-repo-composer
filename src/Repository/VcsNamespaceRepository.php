@@ -74,6 +74,12 @@ class VcsNamespaceRepository extends VcsRepository
             $drivers
         );
 
+        $drivers[self::TYPE_VCS]    = 'Composer\Repository\Vcs\GitDriver';
+        $drivers[self::TYPE_GIT]    = 'Composer\Repository\Vcs\GitDriver';
+        $drivers[self::TYPE_GITLAB] = 'Composer\Repository\Vcs\GitLabDriver';
+        $drivers[self::TYPE_GITHUB] = 'Composer\Repository\Vcs\GitHubDriver';
+        $drivers[self::TYPE_GIT_BITBACKET] = 'Composer\Repository\Vcs\GitBitbucketDriver';
+
         self::$types = array_keys($drivers);
 
         parent::__construct($repoConfig, $io, $config, $dispatcher, $drivers);
@@ -86,7 +92,22 @@ class VcsNamespaceRepository extends VcsRepository
      */
     public static function getTypes()
     {
-        return self::$types;
+        return self::$types ?: [
+            self::TYPE_VCS,
+            self::TYPE_GIT,
+            self::TYPE_GIT_BITBACKET,
+            self::TYPE_GITHUB,
+            self::TYPE_GITLAB,
+            'github',
+            'gitlab',
+            'git-bitbucket',
+            'git',
+            'hg-bitbucket',
+            'hg',
+            'perforce',
+            'fossil',
+            'svn',
+        ];
     }
 
     /**
