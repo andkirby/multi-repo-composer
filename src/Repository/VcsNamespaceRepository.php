@@ -71,7 +71,7 @@ class VcsNamespaceRepository extends VcsRepository
                 // svn must be last because identifying a subversion server for sure is practically impossible
                 'svn'           => 'Composer\Repository\Vcs\SvnDriver',
             ),
-            $drivers
+            (array)$drivers
         );
 
         $drivers[self::TYPE_VCS]    = 'Composer\Repository\Vcs\GitDriver';
