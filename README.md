@@ -3,7 +3,7 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/andkirby/multi-repo-composer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This repository contains multi-package composer repository and GitLab repository for composer.
 
-Released v0.9.0.
+Released v0.9.x.
 It supports generating "dist" config for packages. Satis may provide links to archives.
 
 ## Requirements
